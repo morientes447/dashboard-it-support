@@ -25,6 +25,30 @@ ipcMain.handle('restart-spooler', async () => {
   });
 });
 
+// Clear Print Queue
+ipcMain.handle("clearPrintQueue", async () => {
+  return new Promise((resolve) => {
+
+    exec('net stop spooler && del /Q /F %systemroot%\\System32\\spool\\PRINTERS\\* && net start spooler',
+    (err, stdout) => {
+
+      if (err) {
+        resolve("Gagal membersihkan queue printer");
+      } else {
+        resolve("Queue printer berhasil dibersihkan");
+      }
+
+    });
+
+  });
+});
+
+
+// Open printer settings
+ipcMain.handle("openPrinters", () => {
+  exec('control printers');
+});
+
 // Ping Gateway
 ipcMain.handle('ping-gateway', async () => {
   return new Promise((resolve, reject) => {
@@ -32,7 +56,7 @@ ipcMain.handle('ping-gateway', async () => {
     exec('ipconfig', (error, stdout) => {
       if (error) return reject(error);
 
-      const match = stdout.match(/Default Gateway[ .:]*([\d.]+)/);
+      const match = stdout.match(/Default Gateway[^\n]*\n\s*([\d.]+)/);
       if (!match) return reject("Gateway tidak ditemukan");
 
       const gateway = match[1];

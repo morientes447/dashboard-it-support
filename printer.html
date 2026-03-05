@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Printer Troubleshoot</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <div class="header">
+      <h1>Printer Troubleshoot</h1>
+    </div>
+    <div class="header2">
+      <h2>Pastikan printer memiliki kertas dan tinta yang cukup. Serta sudah dinyalakan dan terkoneksi dengan benar </h2>
+    </div>
+    <div class="topic">
+      <button class="card" onclick="restartSpooler()">Restart Print Spooler</button>
+
+      <button class="card" onclick="clearQueue()">Clear Print Queue</button>
+
+      <button class="card" onclick="openPrinterSettings()">Open Devices & Printers</button>
+
+      <br />
+
+      <button class="tombol"  onclick="location.href = 'index.html'">⬅ Kembali</button>
+    </div>
+
+    <pre id="result"></pre>
+
+    <script>
+      async function restartSpooler() {
+        const result = await window.electronAPI.restartSpooler();
+        document.getElementById("result").innerText = result;
+      }
+
+      async function clearQueue() {
+        const result = await window.electronAPI.clearPrintQueue();
+        document.getElementById("result").innerText = result;
+      }
+
+      function openPrinterSettings() {
+        window.electronAPI.openPrinters();
+      }
+    </script>
+  </body>
+</html>
